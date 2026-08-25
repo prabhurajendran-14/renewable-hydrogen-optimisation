@@ -1,0 +1,42 @@
+{
+  "chosen_lambda": 0.005,
+  "cost_optimiser_iterations": 77,
+  "strategies": {
+    "Naive baseline": {
+      "total_hydrogen_kg": 26.906462797355445,
+      "total_energy_kwh": 1379.6806231320875,
+      "total_ramp_kw": 453.7156635617528,
+      "max_ramp_kw": 23.50911584608042,
+      "mean_power_kw": 57.48669263050365,
+      "total_cost_gbp": 343.9309792425821,
+      "cost_per_kg_h2_gbp": 12.782467239669499
+    },
+    "Ramp-limited baseline": {
+      "total_hydrogen_kg": 26.891397989615868,
+      "total_energy_kwh": 1378.9081461444566,
+      "total_ramp_kw": 447.5358476607064,
+      "max_ramp_kw": 21.79913504683482,
+      "mean_power_kw": 57.45450608935236,
+      "total_cost_gbp": 343.7949394429697,
+      "cost_per_kg_h2_gbp": 12.78456923569858
+    },
+    "Smoothness optimised": {
+      "total_hydrogen_kg": 25.979854175533347,
+      "total_energy_kwh": 1332.1669841085022,
+      "total_ramp_kw": 196.04804586344704,
+      "max_ramp_kw": 19.50929207572956,
+      "mean_power_kw": 55.50695767118759,
+      "total_cost_gbp": 333.908752612903,
+      "cost_per_kg_h2_gbp": 12.852603034522156
+    },
+    "Cost-aware optimised": {
+      "total_hydrogen_kg": 15.227954474214757,
+      "total_energy_kwh": 780.8426501931966,
+      "total_ramp_kw": 309.01843666934525,
+      "max_ramp_kw": 80.0,
+      "mean_power_kw": 32.53511042471653,
+      "total_cost_gbp": 132.3138155987029,
+      "cost_per_kg_h2_gbp": 8.688876488483578
+    }
+  }
+}

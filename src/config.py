@@ -2,23 +2,26 @@ from dataclasses import dataclass
 
 @dataclass
 class Config:
-    # Time settings
+    """Model assumptions for the synthetic 24-hour case study."""
+
     freq_minutes: int = 15
     horizon_hours: int = 24
 
-    # Electrolyser constraints (kW)
-    p_min: float = 10.0
     p_max: float = 80.0
-    ramp_limit: float = 25.0  # max change per timestep (kW)
+    ramp_up_limit_kw: float = 15.0
 
-    # Electrolyser efficiency (simple constant for v1)
     efficiency: float = 0.65
+    hydrogen_lhv_kwh_per_kg: float = 33.33
 
-    # Objective 2 parameter (smoothness penalty)
-    lambda_ramp: float = 0.2
-    abs_smooth_eps: float = 1e-6  # for smooth |x| approximation
+    hydrogen_value_gbp_per_kg: float = 12.0
+    ramp_penalty_gbp_per_kw: float = 0.05
 
-    # Synthetic renewable settings
     renewable_peak: float = 100.0
     noise_std: float = 8.0
+    forecast_noise_std: float = 5.0
+    price_noise_std: float = 0.005
     random_seed: int = 42
+
+    @property
+    def step_hours(self) -> float:
+        return self.freq_minutes / 60.0

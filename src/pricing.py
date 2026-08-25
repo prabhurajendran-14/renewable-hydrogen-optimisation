@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
 
-def generate_price_signal(timestamps: pd.Series, base=0.18):
+def generate_price_signal(
+    timestamps: pd.Series,
+    base: float = 0.18,
+    noise_std: float = 0.005,
+    seed: int = 42,
+) -> np.ndarray:
     """
     Synthetic electricity price pattern (£/kWh):
     - cheaper overnight
@@ -19,8 +24,8 @@ def generate_price_signal(timestamps: pd.Series, base=0.18):
     # Evening peak
     price[(hours >= 16) & (hours < 20)] += 0.30
 
-    # Small noise
-    price += np.random.normal(0, 0.005, size=len(price))
+    rng = np.random.default_rng(seed)
+    price += rng.normal(0, noise_std, size=len(price))
     price = np.clip(price, 0.05, None)
 
     return price

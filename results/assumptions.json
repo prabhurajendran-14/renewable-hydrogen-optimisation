@@ -1,0 +1,16 @@
+{
+  "freq_minutes": 15,
+  "horizon_hours": 24,
+  "p_max": 80.0,
+  "ramp_up_limit_kw": 15.0,
+  "efficiency": 0.65,
+  "hydrogen_lhv_kwh_per_kg": 33.33,
+  "hydrogen_value_gbp_per_kg": 12.0,
+  "ramp_penalty_gbp_per_kw": 0.05,
+  "renewable_peak": 100.0,
+  "noise_std": 8.0,
+  "forecast_noise_std": 5.0,
+  "price_noise_std": 0.005,
+  "random_seed": 42,
+  "step_hours": 0.25
+}

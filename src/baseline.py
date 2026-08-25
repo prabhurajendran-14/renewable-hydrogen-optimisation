@@ -1,20 +1,16 @@
 import numpy as np
 
-def naive_controller(renewable_forecast: np.ndarray, p_min: float, p_max: float) -> np.ndarray:
+def naive_controller(renewable_forecast: np.ndarray, p_max: float) -> np.ndarray:
     """
     Baseline 1 (naive): use as much renewable as possible, clipped to [0, p_max].
-    If renewable < p_min: operate at 0 (off).
     NOTE: No ramp constraints.
     """
-    renewable_forecast = np.asarray(renewable_forecast)
-    p = np.clip(renewable_forecast, 0, p_max)
-    p = np.where(p >= p_min, p, 0.0)
-    return p
+    renewable_forecast = np.asarray(renewable_forecast, dtype=float)
+    return np.clip(renewable_forecast, 0, p_max)
 
 
 def ramp_limited_reactive_controller(
     renewable_forecast: np.ndarray,
-    p_min: float,
     p_max: float,
     ramp_limit: float,
 ) -> np.ndarray:
@@ -22,22 +18,20 @@ def ramp_limited_reactive_controller(
     Baseline 2 (reactive + realistic):
     Follow available renewable power, but enforce:
       - bounds [0, p_max]
-      - if on then >= p_min (otherwise off)
-      - ramp limit per timestep
+      - ramp-up limit per timestep
+
+    Downward curtailment is allowed when renewable availability falls faster
+    than the plant's normal ramp limit.
 
     This gives a fair baseline vs the optimiser (which also respects ramp limits).
     """
-    renewable_forecast = np.asarray(renewable_forecast)
+    renewable_forecast = np.asarray(renewable_forecast, dtype=float)
     T = len(renewable_forecast)
     schedule = np.zeros(T)
 
     for t in range(T):
         # Desired power is "use what's available", clipped to max
         desired = min(renewable_forecast[t], p_max)
-
-        # If desired is below p_min, we choose to stay off (0)
-        if desired < p_min:
-            desired = 0.0
 
         if t == 0:
             schedule[t] = desired
@@ -53,14 +47,6 @@ def ramp_limited_reactive_controller(
 
         # Clip desired into [lower, upper]
         p_t = min(max(desired, lower), upper)
-
-        # Enforce min-on rule again (either 0 or >= p_min)
-        if 0.0 < p_t < p_min:
-            # choose whichever is closer: off (0) or p_min (if feasible)
-            if (p_min <= upper) and (abs(p_min - p_t) < abs(0.0 - p_t)):
-                p_t = p_min
-            else:
-                p_t = 0.0
 
         schedule[t] = p_t
 
